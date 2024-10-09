@@ -2,19 +2,22 @@
 import pyfiglet
 from termcolor import colored
 
-instruction_board = f'''
-     0 | 1 | 2
-    ---|---|---
-     3 | 4 | 5 
-    ---|---|---
-     6 | 7 | 8  
-    '''
 
 tic_tac_toe_board = [
-    ['','',''],
-    ['','',''],
-    ['','','']
+    ['0','1','2'],
+    ['3','4','5'],
+    ['6','7','8']
 ] 
+
+def get_main_board():
+    main_board = f'''
+        {tic_tac_toe_board[0][0]} | {tic_tac_toe_board[0][1]} | {tic_tac_toe_board[0][2]}
+        ---|---|---
+        {tic_tac_toe_board[1][0]} | {tic_tac_toe_board[1][1]} | {tic_tac_toe_board[1][2]}
+        ---|---|---
+        {tic_tac_toe_board[2][0]} | {tic_tac_toe_board[2][1]} | {tic_tac_toe_board[2][2]}
+        '''
+    print(main_board)
 
 def intro():
     """Define Rules and Information needed to play"""
@@ -25,7 +28,7 @@ def intro():
     # Instructions
     intro_statement = f'''
     The rules are simple:
-    {instruction_board}
+    {get_main_board()}
     This is a turn based program, The first player that will start is the first player who inputs their name and symbol.
 
     1. After players and symbols have been selected, player 1 will choose a number between 0-8.
@@ -41,7 +44,7 @@ def intro():
 
 def display_current_board(input, player_symbol):
     """Function to display and track player game"""
-    
+
     # Placing them accordingly
     if input <= 2:
         tic_tac_toe_board[0][input] = player_symbol
@@ -54,7 +57,8 @@ def display_current_board(input, player_symbol):
     else:
         print("Index out of bound wont work")
 
-    print(tic_tac_toe_board)
+    get_main_board()
+    
 
 def game_logic():
     """Create logic that will house the core program functionality"""
@@ -71,8 +75,11 @@ def game_logic():
 
 def main():
     """Function to house and organize program"""
+
     intro()
     game_logic()
+    display_current_board(2,"looking for me")
+    display_current_board(5,"looking for me")
+
 
 main()
-
