@@ -27,22 +27,21 @@ def intro():
     5. Good luck and have fun :)
     '''
 
-
     # Introduction print statement
     print(f"\n{intro_ascii_art}")
     print(intro_statement)
 
-    # Game information
-    game_rounds = input("\nHow many rounds would you like to play? ")
+# Game information
+game_rounds = input("\nHow many rounds would you like to play? ")
 
-    player_one = input("\nWhat is your name Player one: ")
-    player_one_symbol = input("\nWhat symbol would you like to use: ")
+player_one = input("\nWhat is your name Player one: ")
+player_one_symbol = input("\nWhat symbol would you like to use: ")
 
-    player_two = input("\nWhat is your name Player two: ")
-    player_two_symbol = input("\nWhat symbol would you like to use: ")
+player_two = input("\nWhat is your name Player two: ")
+player_two_symbol = input("\nWhat symbol would you like to use: ")
 
-    print(f"\nPlayer one: {player_one}, {player_one_symbol}")
-    print(f"Player two: {player_two}, {player_two_symbol}")
+print(f"\nPlayer one: {player_one}, {player_one_symbol}")
+print(f"Player two: {player_two}, {player_two_symbol}")
 
 
 def main():
