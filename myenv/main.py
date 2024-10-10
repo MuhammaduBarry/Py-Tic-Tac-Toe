@@ -73,25 +73,63 @@ def game_logic():
             break
         else:
             print("Only number between 1 and 5 are allowed try again!")
-
-    print(f"You will play {game_rounds} rounds.")
             
     player_one = input("\nWhat is your name Player one: ")
-    player_one_symbol = input("\nWhat symbol would you like to use: ")
+
+    while True:
+        player_one_symbol = input("\nWhat symbol would you like to use x or o?: ").lower()
+        if player_one_symbol in ["x", "o"]:
+            break
+        else:
+            print("Player symbol has to either 'x' or 'o'")
 
     player_two = input("\nWhat is your name Player two: ")
-    player_two_symbol = input("\nWhat symbol would you like to use: ")
-
     
-    return game_rounds, player_one, player_one_symbol, player_two, player_two_symbol
+    if player_one_symbol == "x":
+        player_two_symbol = "o"
+    elif player_one_symbol == "o":
+        player_two_symbol = "x"
+    
+    # Player move system
+    is_player_one_turn = True
+    is_player_two_turn = False
+
+    # Player One's turn
+    while is_player_one_turn:
+        move_input_player_one = input("\nPick a spot player one: ")
+        if move_input_player_one.isdigit():
+            move_input_player_one = int(move_input_player_one)
+            if move_input_player_one in range(0, 9):
+                display_current_board(move_input_player_one, player_one_symbol)
+                is_player_one_turn = False
+                is_player_two_turn = True
+            else:
+                print("Wrong input, try again")
+        else:
+            print("Numbers 0-8 only")
+
+    # Player Two's turn
+    while is_player_two_turn:
+        move_input_player_two = input("\nPick a spot player two: ")
+        if move_input_player_two.isdigit():
+            move_input_player_two = int(move_input_player_two)
+            if move_input_player_two in range(0, 9) and move_input_player_two != move_input_player_one:
+                display_current_board(move_input_player_two, player_two_symbol)
+                is_player_two_turn = False
+                is_player_one_turn = True
+            else:
+                print("Wrong input, try again")
+        else:
+            print("Numbers 0-8 only")
+
+    return game_rounds, player_one, player_one_symbol, player_two, player_two_symbol, move_input_player_one, move_input_player_two
+
 
 def main():
     """Function to house and organize program"""
 
     intro()
     game_logic()
-    display_current_board(2,"looking for me")
-    display_current_board(5,"looking for me")
 
 
 main()
