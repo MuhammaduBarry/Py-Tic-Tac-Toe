@@ -7,17 +7,20 @@ tic_tac_toe_board = [
     ['0','1','2'],
     ['3','4','5'],
     ['6','7','8']
-] 
-
+]
+ 
 def get_main_board():
+    """Creates the main board every time it is called"""
+
     main_board = f'''
         {tic_tac_toe_board[0][0]} | {tic_tac_toe_board[0][1]} | {tic_tac_toe_board[0][2]}
-        ---|---|---
+        --|---|--
         {tic_tac_toe_board[1][0]} | {tic_tac_toe_board[1][1]} | {tic_tac_toe_board[1][2]}
-        ---|---|---
+        --|---|--
         {tic_tac_toe_board[2][0]} | {tic_tac_toe_board[2][1]} | {tic_tac_toe_board[2][2]}
         '''
-    print(main_board)
+    return main_board
+
 
 def intro():
     """Define Rules and Information needed to play"""
@@ -33,7 +36,7 @@ def intro():
 
     1. After players and symbols have been selected, player 1 will choose a number between 0-8.
     2. Then player 2 will choose another number 0-8, until the players get three in a row, column, and diagonal.
-    3. You will be prompted on how many games you would like to play, 1 up to infinity amount of games.
+    3. You will be prompted on how many games you would like to play, 1 up to 5.
     4. Make sure you double check if the space number has been taken before inputting your number.
     5. Good luck and have fun :)
     '''
@@ -41,7 +44,7 @@ def intro():
     # Introduction print statement
     print(f"\n{intro_ascii_art}")
     print(intro_statement)
-
+   
 def display_current_board(input, player_symbol):
     """Function to display and track player game"""
 
@@ -57,20 +60,29 @@ def display_current_board(input, player_symbol):
     else:
         print("Index out of bound wont work")
 
-    get_main_board()
+    print(get_main_board())
     
 
 def game_logic():
     """Create logic that will house the core program functionality"""
 
-    # Game information
-    game_rounds = input("\nHow many rounds would you like to play? ")
+    while True:
+        game_rounds = input("\nHow many rounds would you like to play? ")
+        if game_rounds.isdigit() and 1 <= int(game_rounds) <= 5:
+            game_rounds = int(game_rounds)
+            break
+        else:
+            print("Only number between 1 and 5 are allowed try again!")
 
+    print(f"You will play {game_rounds} rounds.")
+            
     player_one = input("\nWhat is your name Player one: ")
     player_one_symbol = input("\nWhat symbol would you like to use: ")
 
     player_two = input("\nWhat is your name Player two: ")
     player_two_symbol = input("\nWhat symbol would you like to use: ")
+
+    
     return game_rounds, player_one, player_one_symbol, player_two, player_two_symbol
 
 def main():
