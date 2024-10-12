@@ -2,16 +2,19 @@
 import pyfiglet
 from termcolor import colored
 
-
-tic_tac_toe_board = [
-    ['0','1','2'],
-    ['3','4','5'],
-    ['6','7','8']
+# Initialize the tic-tac-toe board in a function to reset between rounds
+def create_board():
+    return [
+        ['0', '1', '2'],
+        ['3', '4', '5'],
+        ['6', '7', '8']
 ]
- 
+
+# Initialize the main board to be reset after each round
+tic_tac_toe_board = create_board()
+
 def get_main_board():
     """Creates the main board every time it is called"""
-
     main_board = f'''
         {tic_tac_toe_board[0][0]} | {tic_tac_toe_board[0][1]} | {tic_tac_toe_board[0][2]}
         --|---|--
@@ -20,7 +23,6 @@ def get_main_board():
         {tic_tac_toe_board[2][0]} | {tic_tac_toe_board[2][1]} | {tic_tac_toe_board[2][2]}
         '''
     return main_board
-
 
 def intro():
     """Define Rules and Information needed to play"""
@@ -44,24 +46,45 @@ def intro():
     # Introduction print statement
     print(f"\n{intro_ascii_art}")
     print(intro_statement)
-   
+
 def display_current_board(input, player_symbol):
     """Function to display and track player game"""
-
-    # Placing them accordingly
     if input <= 2:
         tic_tac_toe_board[0][input] = player_symbol
     elif 2 < input <= 5:
-        # Removing index error
         tic_tac_toe_board[1][input - 3] = player_symbol
     elif 5 < input <= 8:
-        # Removing index error
         tic_tac_toe_board[2][input - 6] = player_symbol
     else:
-        print("Index out of bound wont work")
+        print("Index out of bound won't work")
 
     print(get_main_board())
-    
+
+def check_win(player_name):
+    x_list = ["x", "x", "x"]
+    o_list = ["o", "o", "o"]
+
+    win_conditions = [
+        [tic_tac_toe_board[0][0], tic_tac_toe_board[1][0], tic_tac_toe_board[2][0]],
+        [tic_tac_toe_board[0][1], tic_tac_toe_board[1][1], tic_tac_toe_board[2][1]],
+        [tic_tac_toe_board[0][2], tic_tac_toe_board[1][2], tic_tac_toe_board[2][2]],
+        [tic_tac_toe_board[0][0], tic_tac_toe_board[0][1], tic_tac_toe_board[0][2]],
+        [tic_tac_toe_board[1][0], tic_tac_toe_board[1][1], tic_tac_toe_board[1][2]],
+        [tic_tac_toe_board[2][0], tic_tac_toe_board[2][1], tic_tac_toe_board[2][2]],
+        [tic_tac_toe_board[0][0], tic_tac_toe_board[1][1], tic_tac_toe_board[2][2]],
+        [tic_tac_toe_board[0][2], tic_tac_toe_board[1][1], tic_tac_toe_board[2][0]],
+    ]
+
+    for condition in win_conditions:
+        if condition == x_list or condition == o_list:
+            print(f"\n{player_name} has won!!!")
+            return True
+    return False
+
+def reset_game():
+    """Reset the board and other variables for a new round"""
+    global tic_tac_toe_board
+    tic_tac_toe_board = create_board()
 
 def game_logic():
     """Create logic that will house the core program functionality"""
@@ -73,7 +96,7 @@ def game_logic():
             break
         else:
             print("Only number between 1 and 5 are allowed try again!")
-            
+    
     player_one = input("\nWhat is your name Player one: ")
 
     while True:
@@ -87,49 +110,66 @@ def game_logic():
     
     if player_one_symbol == "x":
         player_two_symbol = "o"
-    elif player_one_symbol == "o":
+    else:
         player_two_symbol = "x"
-    
-    # Player move system
-    is_player_one_turn = True
-    is_player_two_turn = False
 
-    # Player One's turn
-    while is_player_one_turn:
-        move_input_player_one = input("\nPick a spot player one: ")
-        if move_input_player_one.isdigit():
-            move_input_player_one = int(move_input_player_one)
-            if move_input_player_one in range(0, 9):
-                display_current_board(move_input_player_one, player_one_symbol)
+    current_round = 1
+    player_one_wins = 0
+    player_two_wins = 0
+
+    while current_round <= game_rounds:
+        print(f"\nRound {current_round} starts now!")
+
+        spots_available = list(range(0, 9))
+        def player_move(player_name, player_symbol):
+            while True:
+                move_input = input(f"\nPick an available spot {player_name}: ")
+                if move_input.isdigit():
+                    move_input = int(move_input)
+                    if move_input in spots_available:
+                        display_current_board(move_input, player_symbol)
+                        spots_available.remove(move_input)
+                        break
+                    else:
+                        print("Spot already taken or invalid. Try again.")
+                else:
+                    print("Numbers 0-8 only.")
+
+        is_player_one_turn = True
+        winner = None
+        while spots_available:
+            if is_player_one_turn:
+                player_move(player_one, player_one_symbol)
+                if check_win(player_one):
+                    player_one_wins += 1
+                    winner = player_one
+                    break
                 is_player_one_turn = False
-                is_player_two_turn = True
             else:
-                print("Wrong input, try again")
-        else:
-            print("Numbers 0-8 only")
-
-    # Player Two's turn
-    while is_player_two_turn:
-        move_input_player_two = input("\nPick a spot player two: ")
-        if move_input_player_two.isdigit():
-            move_input_player_two = int(move_input_player_two)
-            if move_input_player_two in range(0, 9) and move_input_player_two != move_input_player_one:
-                display_current_board(move_input_player_two, player_two_symbol)
-                is_player_two_turn = False
+                player_move(player_two, player_two_symbol)
+                if check_win(player_two):
+                    player_two_wins += 1
+                    winner = player_two
+                    break
                 is_player_one_turn = True
-            else:
-                print("Wrong input, try again")
-        else:
-            print("Numbers 0-8 only")
+        
+        if not winner:
+            print("It's a tie!")
+        
+        current_round += 1
+        reset_game()  # Reset the board for the next round
 
-    return game_rounds, player_one, player_one_symbol, player_two, player_two_symbol, move_input_player_one, move_input_player_two
-
+    print(f"\nFinal Score: {player_one}: {player_one_wins}, {player_two}: {player_two_wins}")
+    if player_one_wins > player_two_wins:
+        print(f"{player_one} wins the game!")
+    elif player_two_wins > player_one_wins:
+        print(f"{player_two} wins the game!")
+    else:
+        print("The game is a tie!")
 
 def main():
     """Function to house and organize program"""
-
     intro()
     game_logic()
-
 
 main()
